@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { message, Button } from 'antd';
+import { message, Button, Input } from 'antd';
 import './ListBlog.css';
 import upload_area from "../../Assets/upload_area.svg";
 
 const ListBlog = () => {
     const updateFormRef = useRef(null);
     const [blogs, setBlogs] = useState([]);
+    const [filteredBlogs, setFilteredBlogs] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const [selectedBlog, setSelectedBlog] = useState(null);
     const [image, setImage] = useState(null); // For updated image
     const [video, setVideo] = useState(null); // For updated video
@@ -43,6 +45,7 @@ const ListBlog = () => {
                 }
                 const data = await response.json();
                 setBlogs(data);
+                setFilteredBlogs(data);
             } catch (error) {
                 console.error('Error fetching blogs:', error);
             }
@@ -50,6 +53,18 @@ const ListBlog = () => {
 
         fetchBlogs();
     }, []);
+
+
+    const handleSearch = (e) => {
+        const query = e.target.value.toLowerCase();
+        setSearchQuery(query);
+
+        // Filter blogs based on the search query
+        const filtered = blogs.filter(blog =>
+            blog.title.toLowerCase().includes(query)
+        );
+        setFilteredBlogs(filtered);
+    };
 
     const deleteBlog = async (id) => {
         try {
@@ -61,6 +76,7 @@ const ListBlog = () => {
             }
             message.success('Blog deleted successfully');
             setBlogs(blogs.filter(blog => blog._id !== id));
+            setFilteredBlogs(filteredBlogs.filter(blog => blog._id !== id));
         } catch (error) {
             console.error('Error deleting blog:', error);
             message.error('Error deleting blog');
@@ -133,6 +149,7 @@ const ListBlog = () => {
             }
             const updatedBlog = await response.json();
             setBlogs(blogs.map(blog => (blog._id === id ? updatedBlog.blog : blog)));
+            setFilteredBlogs(filteredBlogs.map(blog => (blog._id === id ? updatedBlog.blog : blog)));
             message.success('Blog updated successfully');
             setSelectedBlog(null); // Close the modal
         } catch (error) {
@@ -144,11 +161,18 @@ const ListBlog = () => {
     return (
         <div className="list-blog">
             <h2>All Blogs</h2>
+            <label>Search by movie name :</label>
+            <Input
+                placeholder="Search by title"
+                value={searchQuery}
+                onChange={handleSearch}
+                style={{ width: '300px', margin: '20px', border: '1px solid' }}
+            />
             <div className="blog-list">
-                {blogs.length === 0 ? (
+                {filteredBlogs.length === 0 ? (
                     <p>No blogs available.</p>
                 ) : (
-                    blogs.map((blog) => (
+                    filteredBlogs.map((blog) => (
                         <div key={blog._id} className="blog-card">
                             <img src={blog.img} alt="blog-img" className="blog-card-img" />
                             <div className="blog-card-content">
