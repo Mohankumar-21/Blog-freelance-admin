@@ -76,6 +76,8 @@ h4 {
     margin-bottom: 5px;
 }
 .update-form {
+ 
+  
     margin-top: 20px;
     padding: 15px;
     background-color: #f8f8f8;
@@ -102,4 +104,9 @@ h4 {
 
 .update-form button:hover {
     background-color: #0056b3;
+}
+
+
+.update-actions button{
+    margin: 20px;
 }

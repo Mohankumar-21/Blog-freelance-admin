@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { message, Button } from 'antd';
 import './ListBlog.css';
 import upload_area from "../../Assets/upload_area.svg";
 
 const ListBlog = () => {
+    const updateFormRef = useRef(null);
     const [blogs, setBlogs] = useState([]);
     const [selectedBlog, setSelectedBlog] = useState(null);
     const [image, setImage] = useState(null); // For updated image
@@ -79,6 +80,10 @@ const ListBlog = () => {
         });
         setImage(null); 
         setVideo(null); 
+
+        if (updateFormRef.current) {
+            updateFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     };
 
     const handleImageChange = (e) => {
@@ -181,7 +186,7 @@ const ListBlog = () => {
             </div>
 
             {selectedBlog && (
-                <div className="update-form">
+                <div className="update-form" ref={updateFormRef}>
                     <h3>Edit Blog</h3>
                     <label>Title:</label>
                     <input
@@ -198,43 +203,43 @@ const ListBlog = () => {
                         placeholder="Category"
                     />
                        <label>Simple Description:</label>
-                    <textarea
+                    <textarea style={{width:"100%"}}
                         value={formData.simpledescription}
                         onChange={(e) => setFormData({ ...formData, simpledescription:  e.target.value  })}
                         placeholder="simpledescription"
                     />
                          <label>Youtube Link:</label>
-                    <textarea
+                    <textarea style={{width:"100%"}}
                         value={formData.back}
                         onChange={(e) => setFormData({ ...formData, back:  e.target.value  })}
                         placeholder="youtube link"
                     />
                     <label>Story:</label>
-                    <textarea
+                    <textarea style={{width:"100%"}}
                         value={formData.description.story}
                         onChange={(e) => setFormData({ ...formData, description: { ...formData.description, story: e.target.value } })}
                         placeholder="Story"
                     />
                     <label>Plus Points:</label>
-                    <textarea
+                    <textarea style={{width:"100%"}}
                         value={formData.description.plusPoint}
                         onChange={(e) => setFormData({ ...formData, description: { ...formData.description, plusPoint: e.target.value } })}
                         placeholder="Plus Points"
                     />
                     <label>Minus Points:</label>
-                    <textarea
+                    <textarea style={{width:"100%"}}
                         value={formData.description.minusPoint}
                         onChange={(e) => setFormData({ ...formData, description: { ...formData.description, minusPoint: e.target.value } })}
                         placeholder="Minus Points"
                     />
                     <label>Technical Aspect:</label>
-                    <textarea
+                    <textarea style={{width:"100%"}}
                         value={formData.description.technicalAspect}
                         onChange={(e) => setFormData({ ...formData, description: { ...formData.description, technicalAspect: e.target.value } })}
                         placeholder="Technical Aspect"
                     />
                     <label>Final Review:</label>
-                    <textarea
+                    <textarea style={{width:"100%"}}
                         value={formData.description.finalReview}
                         onChange={(e) => setFormData({ ...formData, description: { ...formData.description, finalReview: e.target.value } })}
                         placeholder="Final Review"
